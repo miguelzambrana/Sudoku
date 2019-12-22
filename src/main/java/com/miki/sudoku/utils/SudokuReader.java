@@ -1,6 +1,6 @@
 package com.miki.sudoku.utils;
 
-import com.miki.sudoku.business.SudokuTable;
+import com.miki.sudoku.business.SudokuBoard;
 import com.miki.sudoku.pojo.Position;
 
 import java.io.BufferedReader;
@@ -11,14 +11,14 @@ public class SudokuReader
 {
     /**
      * Get Board from file
-     * @param sudokuTable
+     * @param sudokuBoard
      * @param filename
      * @return
      * @throws IOException
      */
-    public static void readBoardFromFile ( SudokuTable sudokuTable , String filename ) throws IOException
+    public static void readBoardFromFile ( SudokuBoard sudokuBoard, String filename ) throws IOException
     {
-        sudokuTable.sudoku = new int[9][9];
+        sudokuBoard.sudoku = new int[9][9];
 
         try ( BufferedReader bf = new BufferedReader(new FileReader(filename)) )
         {
@@ -33,11 +33,11 @@ public class SudokuReader
                 for ( String value : values )
                 {
                     int currentValue = getCurrentValue(value);
-                    sudokuTable.sudoku[position][valuePos] = currentValue;
+                    sudokuBoard.sudoku[position][valuePos] = currentValue;
 
                     if ( currentValue == 0 )
                     {
-                        sudokuTable.freePositions.add(new Position(position, valuePos));
+                        sudokuBoard.freePositions.add(new Position(position, valuePos));
                     }
 
                     valuePos++;
