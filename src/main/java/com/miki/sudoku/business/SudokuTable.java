@@ -1,49 +1,27 @@
 package com.miki.sudoku.business;
 
 import com.miki.sudoku.pojo.Position;
+import com.miki.sudoku.utils.SudokuReader;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class SudokuTable
 {
-    int[][]        sudoku;
-    List<Position> freePositions;
+    public int[][]        sudoku;
+    public List<Position> freePositions;
 
-    public SudokuTable ( String file ) throws IOException
+    public SudokuTable ( String filename ) throws IOException
     {
         freePositions   = new ArrayList<>();
 
-        try ( BufferedReader bf = new BufferedReader(new FileReader(file)) )
-        {
-            sudoku = new int[9][9];
+        // Read sudoku from file
+        SudokuReader.readBoardFromFile(this, filename);
+    }
 
-            String line;
-            int position = 0;
-
-            while((line=bf.readLine())!=null)
-            {
-                String[] values = line.split(",");
-                int valuePos = 0;
-
-                for ( String value : values )
-                {
-                    int currentValue = getCurrentValue(value);
-                    sudoku[position][valuePos] = currentValue;
-
-                    if ( currentValue == 0 )
-                    {
-                        freePositions.add(new Position(position, valuePos));
-                    }
-
-                    valuePos++;
-                }
-
-                position++;
-            }
-        }
+    public int[][] getSudoku()
+    {
+        return sudoku;
     }
 
     public List<Position> getFreePositions()
@@ -51,16 +29,11 @@ public class SudokuTable
         return freePositions;
     }
 
-    private int getCurrentValue ( String value )
-    {
-        try {
-            return Integer.valueOf(value);
-        }
-        catch ( Exception e ) {
-            return 0;
-        }
-    }
-
+    /**
+     * Get possibilities from position
+     * @param freePosition
+     * @return
+     */
     public List<Integer> getPosibleValues ( Position freePosition )
     {
         // Create possibilities
